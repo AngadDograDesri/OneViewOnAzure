@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function createUser() {
   try {
-    // List of users to create
+    // List of users to create yes
     const users = [
       {
         name: 'Thomas De Swardt',
