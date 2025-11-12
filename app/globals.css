@@ -1,0 +1,401 @@
+/* app/globals.css - semantic mappings + tokens (drop-in for Next.js) */
+
+/* Sticky table headers */
+.sticky-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: hsl(var(--muted));
+}
+
+.sticky-table-header-primary {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Force Recharts labels to be visible - disable animations */
+.recharts-label,
+.recharts-bar-label,
+.recharts-text {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Load Tailwind base + components + utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -------------------------
+   Design tokens (CSS vars)
+   -------------------------
+   These are the same HSL triplets you had in index.css.
+   Keep them as HSL triplets so we can use hsl(var(--...)) easily.
+*/
+:root {
+  --background: 214 30% 96%;
+  --foreground: 222 47% 11%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+
+  --primary: 214 44% 16%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 214 25% 93%;
+  --secondary-foreground: 222 47% 11%;
+
+  --muted: 214 25% 93%;
+  --muted-foreground: 215 16% 47%;
+
+  --accent: 214 44% 16%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 214 20% 85%;
+  --input: 214 20% 85%;
+  --ring: 214 44% 16%;
+
+  --radius: 0.75rem;
+
+  --sidebar-background: 214 44% 16%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 214 44% 16%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 214 44% 20%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 214 44% 20%;
+  --sidebar-ring: 214 44% 25%;
+
+  --chart-1: 214 44% 16%;
+  --chart-2: 221 83% 53%;
+  --chart-3: 212 95% 68%;
+  --chart-4: 339 82% 62%;
+  --chart-5: 210 98% 78%;
+
+  --table-header: 214 44% 16%;
+  --table-row-even: 214 30% 97%;
+  --table-hover: 214 30% 95%;
+
+  /* shadows (strings) */
+  --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+  --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+  --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1);
+  --shadow-elegant: 0 8px 16px -4px hsl(214 44% 16% / 0.1);
+}
+
+/* dark mode tokens */
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 214 44% 16%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 214 44% 16%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --ring: 214 44% 16%;
+  --sidebar-background: 214 44% 16%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 214 44% 16%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 214 44% 20%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 214 44% 20%;
+  --sidebar-ring: 214 44% 25%;
+  --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+  --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4);
+  --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5);
+  --shadow-elegant: 0 8px 16px -4px hsl(214 44% 16% / 0.2);
+}
+
+/* -------------------------
+   Global base rules (explicit)
+   ------------------------- */
+html, body, #__next {
+  height: 100%;
+}
+
+/* base body colors using CSS vars (explicit, not @apply) */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height: 1.35;
+  margin: 0;
+  padding: 0;
+}
+
+/* Improved description text styling */
+.description-text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Better table alignment */
+.table-cell {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table-cell-left {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table-cell-right {
+  vertical-align: middle;
+  text-align: right;
+}
+
+.table-cell-center {
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Table styling for uniform colors */
+.table-first-col {
+  background-color: hsl(var(--muted));
+  font-weight: 500;
+  text-align: left;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.table-data-col {
+  background-color: hsl(var(--card));
+  text-align: left;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.table-row-even .table-first-col {
+  background-color: hsl(var(--muted));
+}
+
+.table-row-odd .table-first-col {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.table-row-even .table-data-col {
+  background-color: hsl(var(--card));
+}
+
+.table-row-odd .table-data-col {
+  background-color: hsl(var(--card));
+}
+
+.table-data-col-left {
+  background-color: hsl(var(--card));
+  text-align: left;
+  padding-left: 1.5rem;
+}
+
+/* Improved tab spacing */
+.tab-trigger {
+  padding: 0.75rem 2rem;
+  margin-right: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  flex: 1;
+  text-align: center;
+}
+
+.tab-trigger:hover {
+  background-color: hsl(var(--muted));
+  border-radius: 0.375rem;
+}
+
+/* Scrollable timeline */
+.timeline-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--muted));
+}
+
+.timeline-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}
+
+/* -------------------------
+   Semantic helper classes (map to your tokens)
+   These replace the dependency on tailwind.config mappings.
+   ------------------------- */
+/* CSS custom properties are defined above in :root and .dark selectors */
+
+/* Background / text helpers */
+.bg-background { background-color: hsl(var(--background)); }
+.text-foreground { color: hsl(var(--foreground)); }
+
+.bg-card { background-color: hsl(var(--card)); }
+.text-card-foreground { color: hsl(var(--card-foreground)); }
+
+.bg-popover { background-color: hsl(var(--popover)); }
+.text-popover-foreground { color: hsl(var(--popover-foreground)); }
+
+.bg-primary { background-color: hsl(var(--primary)); }
+.text-primary-foreground { color: hsl(var(--primary-foreground)); }
+
+.bg-secondary { background-color: hsl(var(--secondary)); }
+.text-secondary-foreground { color: hsl(var(--secondary-foreground)); }
+
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.bg-accent { background-color: hsl(var(--accent)); }
+.text-accent-foreground { color: hsl(var(--accent-foreground)); }
+
+/* border / input / ring helpers */
+.border-border { border-color: hsl(var(--border)); }
+.border-input { border-color: hsl(var(--input)); }
+.ring-ring { box-shadow: 0 0 0 3px color-mix(in srgb, hsl(var(--ring)) 8%, transparent); }
+
+/* radius + shadow helpers */
+.rounded-lg { border-radius: var(--radius); }
+.shadow-elegant { box-shadow: var(--shadow-elegant); }
+.shadow-sm-var { box-shadow: var(--shadow-sm); }
+.shadow-md-var { box-shadow: var(--shadow-md); }
+.shadow-lg-var { box-shadow: var(--shadow-lg); }
+
+/* sidebar tokens (useful if you reference them directly) */
+.bg-sidebar { background-color: hsl(var(--sidebar-background)); }
+.text-sidebar-foreground { color: hsl(var(--sidebar-foreground)); }
+
+/* small utility to match your components expecting the 'card' border + padding */
+.card-base {
+  border: 1px solid hsl(var(--sidebar-border));
+  border-radius: calc(var(--radius) - 0.125rem);
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+[class*="border-"],
+[class^="border-"] {
+  /* only set color if the element has an actual border style/width */
+  border-color: hsl(var(--border));
+}
+.border-sidebar-border { border-color: hsl(var(--sidebar-border)); }
+
+
+/* Or if you want a single subtle header bottom border instead */
+header {
+  border-bottom: 1px solid rgba(0,0,0,0.04); /* tweak for light/dark */
+  box-shadow: none;
+}
+/* ===== PDF-SPECIFIC STYLES ===== */
+
+/* Hide elements when in PDF mode */
+[data-pdf="true"] button,
+[data-pdf="true"] [role="tablist"] {
+  display: none !important;
+}
+
+@media print {
+  /* Force large screen breakpoint */
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  
+  /* Make print think it's desktop */
+  body {
+    width: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Force the main flex container to display */
+  body > div,
+  body > div > div,
+  #__next,
+  #__next > div {
+    display: block !important;
+    width: 100% !important;
+  }
+  
+  /* Side-by-side layout */
+  aside {
+    width: 25% !important;
+    float: left !important;
+    display: block !important;
+  }
+  
+  aside ~ div {
+    width: 75% !important;
+    float: right !important;
+    display: block !important;
+  }
+  
+  /* Expand scrollable areas */
+  [class*="overflow"],
+  [class*="max-h"],
+  [data-radix-scroll-area-viewport],
+  .overflow-auto,
+  .overflow-y-auto {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+  
+  /* Hide UI elements */
+  button,
+  [role="tablist"],
+  nav:not([class*="breadcrumb"]) {
+    display: none !important;
+  }
+  
+  /* Clear floats */
+  aside::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+/* Increase ONLY table data font size in dashboard */
+[data-testid="dashboard-content"] table td {
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+}
+[data-testid="dashboard-content"] table th {
+  font-size: 19px !important;
+  font-weight: 600 !important;
+}
+[data-testid="dashboard-content"] h3,
+[data-testid="dashboard-content"] [class*="CardTitle"] {
+  font-size: 22px !important;
+}

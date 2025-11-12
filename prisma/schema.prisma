@@ -1,0 +1,1138 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider     = "sqlserver"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  name       String?
+  role       String   @default("user")
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+model Project {
+  id                           Int                             @id @default(autoincrement())
+  project_name                 String
+  project_stage                String?
+  project_type                 String?
+  description                  String?
+  created_at                   DateTime                        @default(now())
+  updated_at                   DateTime                        @default(now(), map: "DF_Project_updated_at") @updatedAt
+  amort_schedule               AmortSchedule[]
+  asset_co                     AssetCo[]
+  construction                 Construction[]
+  corporate_debt               CorporateDebt[]
+  debt_vs_swaps                DebtVsSwaps[]
+  dscr                         Dscr[]
+  energy                       Energy[]
+  equipments_bess_augmentation EquipmentsBessAugmentation[]
+  equipments_bess_cells        EquipmentsBessCells[]
+  equipments_bess_enclosure    EquipmentsBessEnclosure[]
+  equipments_bess_modules      EquipmentsBessModules[]
+  equipments_bess_segments     EquipmentsBessSegments[]
+  equipments_bess_software     EquipmentsBessSoftware[]
+  equipments_bop               EquipmentsBop[]
+  equipments_hv                EquipmentsHv[]
+  equipments_inverters         EquipmentsInverters[]
+  equipments_modules           EquipmentsModules[]
+  equipments_racking           EquipmentsRacking[]
+  equipments_scada             EquipmentsScada[]
+  equipments_transformers      EquipmentsTransformers[]
+  equipments_wind              EquipmentsWind[]
+  financing_counterparties     FinancingCounterparties[]
+  financing_scheduler          FinancingScheduler[]
+  financing_terms              FinancingTerms[]
+  interconnection              Interconnection[]
+  lc                           Lc[]
+  milestone_epc                MilestoneEpc[]
+  milestone_finance            MilestoneFinance[]
+  milestone_interconnect       MilestoneInterconnect[]
+  milestone_offtake            MilestoneOfftake[]
+  milestone_om                 MilestoneOm[]
+  milestone_other              MilestoneOther[]
+  milestone_regulatory         MilestoneRegulatory[]
+  nav                          Nav[]
+  offtake_contract_details     OfftakeContractDetails[]
+  offtake_market_risks         OfftakeMarketRisks[]
+  offtake_merchant             OfftakeMerchant[]
+  offtake_product_delivery     OfftakeProductandDelivery[]
+  offtake_prices_damage        OfftakeProductPricesandDamage[]
+  offtake_rec                  OfftakeRec[]
+  offtake_security             OfftakeSecurity[]
+  om                           OM[]
+  overview                     Overview[]
+  poc                          Poc[]
+  refinancing                  Refinancing[]
+  swaps                        Swaps[]
+  tax_equity                   TaxEquity[]
+  telecom                      Telecom[]
+  utility                      Utility[]
+}
+
+model Overview {
+  id                   Int      @id @default(autoincrement())
+  project_id           Int
+  address              String?
+  city                 String?
+  state                String?
+  state_abbreviation   String?
+  county               String?
+  zip                  Int?
+  latitude             Float?
+  longitude            Float?
+  elevation_feet       Int?
+  project_source       String?
+  project_stage        String?
+  facility_type        String?
+  offtake_type         String?
+  dc_capacity          Float?
+  poi_ac_capacity      Float?
+  dc_ac_ratio          Float?
+  as_built_ac_capacity Float?
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now(), map: "DF_Overview_updated_at") @updatedAt
+  project              Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneOfftake {
+  id                         Int       @id @default(autoincrement())
+  project_id                 Int
+  offtake_counterparty       String?
+  offtake_executed_date      DateTime?
+  offtake_executed_date_type String?
+  offtake_cod_date           DateTime?
+  offtake_cod_date_type      String?
+  created_at                 DateTime  @default(now())
+  updated_at                 DateTime  @default(now(), map: "DF_MilestoneOfftake_updated_at") @updatedAt
+  project                    Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneFinance {
+  id                           Int       @id @default(autoincrement())
+  project_id                   Int
+  financial_closing_date       DateTime?
+  financial_closing_date_type  String?
+  te_initial_funding_date      DateTime?
+  te_initial_funding_date_type String?
+  te_final_funding_date        DateTime?
+  te_final_funding_date_type   String?
+  term_conversion_date         DateTime?
+  term_conversion_date_type    String?
+  refinancing_date             DateTime?
+  refinancing_date_type        String?
+  created_at                   DateTime  @default(now())
+  updated_at                   DateTime  @default(now(), map: "DF_MilestoneFinance_updated_at") @updatedAt
+  project                      Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneInterconnect {
+  id                                       Int       @id @default(autoincrement())
+  project_id                               Int
+  interconnection_counterparty             String?
+  interconnection_executed_date            DateTime?
+  interconnection_executed_date_type       String?
+  gia_utility_backfeed_readiness_date      DateTime?
+  interconnect_cod_date                    DateTime?
+  interconnect_cod_date_type               String?
+  gia_cod_cliff_date                       DateTime?
+  gia_cod_cliff_date_type                  String?
+  iso_rta_baa_cod_date                     DateTime?
+  iso_rta_baa_cod_date_type                String?
+  created_at                               DateTime  @default(now())
+  updated_at                               DateTime  @default(now(), map: "DF_MilestoneInterconnect_updated_at") @updatedAt
+  gia_utility_backfeed_readiness_date_type String?
+  project                                  Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneRegulatory {
+  id                                         Int       @id @default(autoincrement())
+  project_id                                 Int
+  mpsc_puc_approval_date                     DateTime?
+  nerc_registration_regulatory_cod_date      DateTime?
+  nerc_registration_regulatory_cod_date_type String?
+  created_at                                 DateTime  @default(now())
+  updated_at                                 DateTime  @default(now(), map: "DF_MilestoneRegulatory_updated_at") @updatedAt
+  mpsc_puc_approval_date_type                String?
+  project                                    Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneEpc {
+  id                                            Int       @id @default(autoincrement())
+  project_id                                    Int
+  epc_type                                      String?
+  epc_name                                      String?
+  epc_lntp_1_date                               DateTime?
+  epc_fntp_date                                 DateTime?
+  epc_fntp_date_type                            String?
+  epc_site_mobilization_date                    DateTime?
+  initial_block_mechanical_completion_date      DateTime?
+  initial_block_mechanical_completion_date_type String?
+  mechanical_completion_date                    DateTime?
+  mechanical_completion_date_type               String?
+  pis_date                                      DateTime?
+  pis_date_type                                 String?
+  backfeed_date                                 DateTime?
+  backfeed_date_type                            String?
+  substantial_completion_date                   DateTime?
+  substantial_completion_date_type              String?
+  hv_substation_initial_sync_date               DateTime?
+  hv_substation_initial_sync_date_type          String?
+  substation_switchyard_energization_date       DateTime?
+  substation_switchyard_energization_date_type  String?
+  epc_final_acceptance_date                     DateTime?
+  epc_final_acceptance_date_type                String?
+  created_at                                    DateTime  @default(now())
+  updated_at                                    DateTime  @default(now(), map: "DF_MilestoneEpc_updated_at") @updatedAt
+  epc_lntp_1_date_type                          String?
+  epc_site_mobilization_date_type               String?
+  project                                       Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneOm {
+  id                                          Int       @id @default(autoincrement())
+  project_id                                  Int
+  om_pre_start_service_commencement_date      DateTime?
+  om_services_commencement_date               DateTime?
+  created_at                                  DateTime  @default(now())
+  updated_at                                  DateTime  @default(now(), map: "DF_MilestoneOm_updated_at") @updatedAt
+  om_pre_start_service_commencement_date_type String?
+  om_services_commencement_date_type          String?
+  project                                     Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model MilestoneOther {
+  id                                      Int       @id @default(autoincrement())
+  project_id                              Int
+  psa_mipsa_execution_date                DateTime?
+  switchyard_ownership_transfer_date      DateTime?
+  switchyard_ownership_transfer_date_type String?
+  created_at                              DateTime  @default(now())
+  updated_at                              DateTime  @default(now(), map: "DF_MilestoneOther_updated_at") @updatedAt
+  psa_mipsa_execution_date_type           String?
+  project                                 Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model Interconnection {
+  id                                     Int       @id @default(autoincrement())
+  project_id                             Int
+  interconnection_queue_position         String?
+  iso_rto_baa                            String?
+  interconnection_cluster                String?
+  interconnection_status                 String?
+  interconnection_counterparty_to        String?
+  interconnection_type                   String?
+  interconnection_costs_reimbursable     Float?
+  interconnection_costs_non_reimbursable Float?
+  total_interconnection_costs            Float?
+  interconnection_comments               String?
+  host_plant_capacity                    Float?
+  interconnection_voltage                Float?
+  meter_maintenance_frequency            Float?
+  power_factor_range                     String?
+  number_of_amendments                   Int?
+  network_upgrade_cost                   Float?
+  completion_of_network_upgrade          DateTime?
+  interconnection_poi_location           String?
+  title_real_estate                      String?
+  mineral_rights                         String?
+  gen_tie_line                           String?
+  gen_tie_line_length_miles              Float?
+  gen_tie_operator                       String?
+  node                                   String?
+  hub                                    String?
+  created_at                             DateTime  @default(now())
+  updated_at                             DateTime  @default(now(), map: "DF_Interconnection_updated_at") @updatedAt
+  interconnection_vintage_year           Int?
+  interconnection_term_end_date          DateTime?
+  project                                Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model Energy {
+  id                          Int      @id @default(autoincrement())
+  project_id                  Int
+  ie_name                     String?
+  project_useful_life         Int?
+  annual_energy_p50           Float?
+  annual_energy_p99           Float?
+  dc_capacity                 Float?
+  poi_limit                   Float?
+  specific_yield              Float?
+  dc_capacity_factor          Float?
+  ac_capacity_factor          Float?
+  performance_ratio           Float?
+  annual_ghi                  Float?
+  annual_poa_irradiance       Float?
+  dc_annual_degradation_rate  Float?
+  average_ac_degradation_rate Float?
+  weather_data_source         String?
+  avg_annual_ambient_temp     Float?
+  comment                     String?
+  night_time_losses           String?
+  true_capture_gain           String?
+  sub_hourly_loss             String?
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @default(now(), map: "DF_Energy_updated_at") @updatedAt
+  project                     Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeContractDetails {
+  id                                 Int       @id @default(autoincrement())
+  project_id                         Int
+  offtake_counterparty               String?
+  ultimate_parent_offtaker           String?
+  market_participant                 String?
+  contracted_capacity                Int?
+  offtake_percent_nameplate          Float?
+  ppa_expected_annual_p50_mwh        Int?
+  availability_guarantee_percent     Float?
+  min_annual_delivery                Int?
+  energy_delivery_term_start_date    String?
+  energy_term_duration_years         Int?
+  energy_delivery_term_end_date      DateTime?
+  extension_option_available         String?
+  co_located_battery                 String?
+  offtake_notes                      String?
+  created_at                         DateTime  @default(now())
+  updated_at                         DateTime  @default(now(), map: "DF_OfftakeContractDetails_updated_at") @updatedAt
+  offtake_guaranteed_commercial_date DateTime?
+  project                            Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeRec {
+  id                               Int       @id @default(autoincrement())
+  project_id                       Int
+  offtake_counterparty             String?
+  recs_bundled_with_energy         String?
+  rec_program                      String?
+  rec_registry                     String?
+  rec_contract_start_date          String?
+  rec_tenure_duration              Int?
+  rec_contract_end_date            DateTime?
+  surplus_recs                     String?
+  unbundled_test_energy_recs       String?
+  min_rec_volume_per_year          Float?
+  max_rec_volume_per_year          Float?
+  rec_shortfall_liquidated_damages String?
+  rec_remarketing_rights           String?
+  minimum_rec_volume               String?
+  maximum_rec_volume               String?
+  created_at                       DateTime  @default(now())
+  updated_at                       DateTime  @default(now(), map: "DF_OfftakeRec_updated_at") @updatedAt
+  rec_price                        Float?
+  project                          Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeProductandDelivery {
+  id                                   Int      @id @default(autoincrement())
+  project_id                           Int
+  offtake_counterparty                 String?
+  project_output                       String?
+  capacity_zone                        String?
+  seller_required_to_accredit_capacity String?
+  capacity_accreditation_risk          String?
+  ancillary_services_rights            String?
+  elective_settlement_option           String?
+  physical_delivery_point              String?
+  financial_settlement_point           String?
+  market_participant_service_provider  String?
+  is_settlement_a_cfd                  String?
+  settlement_market                    String?
+  capacity_delivery_different          String?
+  transfers_energy_via_iso             String?
+  buyer_sets_da_quantity               String?
+  created_at                           DateTime @default(now())
+  updated_at                           DateTime @default(now(), map: "DF_OfftakeProductandDelivery_updated_at") @updatedAt
+  project                              Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeProductPricesandDamage {
+  id                                Int      @id @default(autoincrement())
+  project_id                        Int
+  offtake_counterparty              String?
+  contract_price                    Float?
+  fixed_or_escalating_price         String?
+  test_energy_settlement            String?
+  price_escalation_detail           String?
+  capacity_bundled_with_energy      String?
+  balancing_charges_included_in_ppa String?
+  floor_price                       Int?
+  floor_cap_annual_spend_cap        Int?
+  financing_termination_fee         Int?
+  delay_damages                     String?
+  capacity_damages                  String?
+  early_termination_fee             String?
+  created_at                        DateTime @default(now())
+  updated_at                        DateTime @default(now(), map: "DF_OfftakeProductPricesandDamage_updated_at") @updatedAt
+  project                           Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeMarketRisks {
+  id                            Int      @id @default(autoincrement())
+  project_id                    Int
+  offtake_counterparty          String?
+  basis_risk                    String?
+  basis_protection              String?
+  economic_curtailment_terms    String?
+  curtailment_threshold         String?
+  reimbursable_curtailment      String?
+  day_ahead_vs_realtime_risk    String?
+  underproduction_penalty_terms String?
+  overproduction_risk           String?
+  overproduction_penalty_terms  String?
+  annual_curtailment_cap        String?
+  curtailment_cap_terms         String
+  created_at                    DateTime @default(now())
+  updated_at                    DateTime @default(now(), map: "DF_OfftakeMarketRisks_updated_at") @updatedAt
+  project                       Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeSecurity {
+  id                                       Int      @id @default(autoincrement())
+  project_id                               Int
+  offtake_counterparty                     String?
+  performance_assurance_instrument_type    String?
+  operational_credit_amount                String?
+  performance_assurance_credit_beneficiary String?
+  created_at                               DateTime @default(now())
+  updated_at                               DateTime @default(now(), map: "DF_OfftakeSecurity_updated_at") @updatedAt
+  project                                  Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OfftakeMerchant {
+  id                         Int      @id @default(autoincrement())
+  project_id                 Int
+  merchant_capacity          Int?
+  merchant_percent_nameplate Int?
+  created_at                 DateTime @default(now())
+  updated_at                 DateTime @default(now(), map: "DF_OfftakeMerchant_updated_at") @updatedAt
+  project                    Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsInverters {
+  id                         Int       @id @default(autoincrement())
+  project_id                 Int
+  manufacturer               String?
+  quantity                   Int?
+  model                      String?
+  capacity                   Int?
+  efficiency                 Float?
+  system_voltage_max_vdc     Int?
+  pmt_manufacturer           String?
+  pmt_quantity               Int?
+  pmt_model                  String?
+  pmt_rating                 Int?
+  warranty                   Int?
+  warranty_end_date_inverter DateTime?
+  created_at                 DateTime  @default(now())
+  updated_at                 DateTime  @default(now(), map: "DF_EquipmentsInverters_updated_at") @updatedAt
+  project                    Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsTransformers {
+  id                    Int       @id @default(autoincrement())
+  project_id            Int
+  manufacturer          String?
+  quantity              Int?
+  rating                String?
+  backup_power_type     String?
+  mpt_po_date           DateTime?
+  mpt_delivery_location String?
+  warranty_period       Int?
+  warranty_end_date     DateTime?
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @default(now(), map: "DF_EquipmentsTransformers_updated_at") @updatedAt
+  project               Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBop {
+  id                         Int      @id @default(autoincrement())
+  project_id                 Int
+  number_of_feeders          Int?
+  o_and_m_building_available String?
+  capacitor_bank_installed   String?  @db.VarChar(50)
+  number_of_combiner_boxes   Int?
+  created_at                 DateTime @default(now())
+  updated_at                 DateTime @default(now(), map: "DF_EquipmentsBop_updated_at") @updatedAt
+  project                    Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsModules {
+  id                 Int      @id @default(autoincrement())
+  project_id         Int
+  manufacturer       String?
+  quantity           Int?
+  model              String?
+  wattage            Int?
+  modules_per_string Int?
+  efficiency         Float?
+  type               String?
+  warranty           Int?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now(), map: "DF_EquipmentsModules_updated_at") @updatedAt
+  project            Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsRacking {
+  id                                      Int       @id @default(autoincrement())
+  project_id                              Int
+  manufacturer                            String?
+  quantity                                String?
+  model                                   String?
+  tracking_degrees                        Int?
+  module_tilt                             Int?
+  module_orientation                      String?
+  wind_load_rating                        Int?
+  warranty                                String?
+  warranty_end_date_structural_components DateTime?
+  warranty_end_date_motor_control_system  DateTime?
+  created_at                              DateTime  @default(now())
+  updated_at                              DateTime  @default(now(), map: "DF_EquipmentsRacking_updated_at") @updatedAt
+  smart_tracking                          String?   @db.VarChar(50)
+  project                                 Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsHv {
+  id                            Int       @id @default(autoincrement())
+  project_id                    Int
+  hv_breaker_manufacturer       String?
+  hv_breaker_kv                 Float?
+  hv_breaker_delivery_location  String?
+  warranty_end_date_hv_breakers DateTime?
+  created_at                    DateTime  @default(now())
+  updated_at                    DateTime  @default(now(), map: "DF_EquipmentsHv_updated_at") @updatedAt
+  hv_breaker_ordered            String?   @db.VarChar(50)
+  project                       Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsScada {
+  id                      Int       @id @default(autoincrement())
+  project_id              Int
+  scada_version           String?
+  upgrades                String?
+  plant_scada_make        String?
+  controller              String?
+  hmi                     String?
+  admin                   String?
+  integrator              String?
+  firewall_manufacturer   String?
+  warranty_end_date_scada DateTime?
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @default(now(), map: "DF_EquipmentsScada_updated_at") @updatedAt
+  project                 Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model Construction {
+  id                       Int       @id @default(autoincrement())
+  project_id               Int
+  epc_type                 String?
+  contractor_name          String?
+  contract_price           Float?
+  contract_date            DateTime?
+  number_of_change_orders  Int?
+  warranty_period_years    Int?
+  spare_parts_allowance    Float?
+  electrical_subcontractor String?
+  lds_per_day_usd          Float?
+  mc_ld_start_date         DateTime?
+  sc_ld_start_date         DateTime?
+  epc_bos_cost             Float?
+  created_at               DateTime  @default(now())
+  updated_at               DateTime  @default(now(), map: "DF_Construction_updated_at") @updatedAt
+  epc_warranty_in_effect   String?   @db.VarChar(10)
+  warranty_end_date_epc    DateTime?
+  project                  Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model OM {
+  id                              Int      @id @default(autoincrement())
+  project_id                      Int
+  o_and_m_contractor              String?
+  o_and_m_status                  String?
+  service_fee                     Float?
+  term                            Int?
+  escalator                       Float?
+  availability_guarantee_percent  Int?
+  number_of_amendments            Int?
+  key_contact_1                   String?
+  key_contact_2                   String?
+  key_contact_3                   String?
+  key_contact_4                   String?
+  key_contact_5                   String?
+  link_to_emergency_response_plan String?
+  created_at                      DateTime @default(now())
+  updated_at                      DateTime @default(now(), map: "DF_OM_updated_at") @updatedAt
+  project                         Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model Telecom {
+  id                     Int      @id @default(autoincrement())
+  project_id             Int
+  provider               String?
+  account_number         String?
+  circuit_ids            String?
+  service_type           String?
+  description            String?
+  notes                  String?
+  monthly_cost           Float?
+  billing_frequency      String?
+  support_contact_number String?
+  support_detail         String?
+  billing_address        String?
+  service_address        String?
+  warranty_period_years  String?
+  created_at             DateTime @default(now())
+  updated_at             DateTime @default(now(), map: "DF_Telecom_updated_at") @updatedAt
+  green_it_loa           String?  @db.VarChar(10)
+  project                Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model Utility {
+  id                            Int      @id @default(autoincrement())
+  project_id                    Int
+  provider                      String?
+  aux_power                     String?
+  solar_aux_power               String?
+  account_number                String?
+  service_type                  String?
+  credit_amount                 Int?
+  invoice_day_of_month          Int?
+  url                           String?
+  login_id                      String?
+  accounts_payable_poc          String?
+  utility_check                 String?
+  ap_comments                   String?
+  registered_contact_email      String?
+  support_contact_number        String?
+  support_detail                String?
+  billing_frequency             String?
+  monthly_cost                  Int?
+  created_at                    DateTime @default(now())
+  updated_at                    DateTime @default(now(), map: "DF_Utility_updated_at") @updatedAt
+  paperless_billing             String?  @db.VarChar(10)
+  online_access                 String?  @db.VarChar(10)
+  ap_team_registered_as_contact String?  @db.VarChar(10)
+  project                       Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model Poc {
+  id                 Int      @id @default(autoincrement())
+  project_id         Int
+  asset_manager      String?
+  deal               String?
+  dscr               String?
+  project_controller String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now(), map: "DF_Poc_updated_at") @updatedAt
+  project            Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsWind {
+  id                        Int      @id @default(autoincrement())
+  project_id                Int
+  wind_turbine_manufacturer String?
+  model                     String?
+  nameplate_capacity        Float?
+  max_capacity              Float?
+  quantity                  Int?
+  hub_height                Float?
+  rotor_diameter            Float?
+  blade_manufacturer        String?
+  blade_quantity            Int?
+  blade_material            String?
+  generator_manufacturer    String?
+  generator_quantity        Int?
+  gearbox_manufacturer      String?
+  gearbox_quantity          Int?
+  warranty_years            Int?
+  created_at                DateTime @default(now())
+  updated_at                DateTime @default(now(), map: "DF_EquipmentsWind_updated_at") @updatedAt
+  project                   Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBessEnclosure {
+  id                    Int      @id @default(autoincrement())
+  project_id            Int
+  bess_manufacturer     String?
+  quantity              Int?
+  model                 String?
+  enclosure_capacity    Float?
+  inverter_in_enclosure String?
+  created_at            DateTime @default(now())
+  updated_at            DateTime @default(now(), map: "DF_EquipmentsBessEnclosure_updated_at") @updatedAt
+  project               Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBessSegments {
+  id                     Int       @id @default(autoincrement())
+  project_id             Int
+  design                 String?
+  manufacturer           String?
+  enclosure_model        String?
+  number_of_enclosures   Int?
+  warranty_end_date_bess DateTime?
+  created_at             DateTime  @default(now())
+  updated_at             DateTime  @default(now(), map: "DF_EquipmentsBessSegments_updated_at") @updatedAt
+  project                Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBessSoftware {
+  id                                Int       @id @default(autoincrement())
+  project_id                        Int
+  control_details                   String?
+  historian_model                   String?
+  historian_backup                  String?
+  rtac                              String?
+  warranty_end_date_bess_controller DateTime?
+  created_at                        DateTime  @default(now())
+  updated_at                        DateTime  @default(now(), map: "DF_EquipmentsBessSoftware_updated_at") @updatedAt
+  project                           Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBessModules {
+  id                        Int       @id @default(autoincrement())
+  project_id                Int
+  module_oem                String?
+  module_type               String?
+  quantity                  Int?
+  module_model              String?
+  wattage_kwh               Float?
+  warranty_years            Int?
+  efficiency_percent        Float?
+  warranty_end_date_battery DateTime?
+  created_at                DateTime  @default(now())
+  updated_at                DateTime  @default(now(), map: "DF_EquipmentsBessModules_updated_at") @updatedAt
+  project                   Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBessCells {
+  id                Int      @id @default(autoincrement())
+  project_id        Int
+  bess_manufacturer String?
+  quantity          Int?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @default(now(), map: "DF_EquipmentsBessCells_updated_at") @updatedAt
+  project           Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model EquipmentsBessAugmentation {
+  id                        Int      @id @default(autoincrement())
+  project_id                Int
+  link_to_augmentation_plan String?
+  created_at                DateTime @default(now())
+  updated_at                DateTime @default(now(), map: "DF_EquipmentsBessAugmentation_updated_at") @updatedAt
+  project                   Project  @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model LoanTypes {
+  id                 Int                  @id @default(autoincrement())
+  loan_name          String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now(), map: "DF_LoanTypes_updated_at") @updatedAt
+  FinancingScheduler FinancingScheduler[]
+  FinancingTerms     FinancingTerms[]
+}
+
+model FinancingTermsSection {
+  id                  Int                   @id @default(autoincrement())
+  section_name        String
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @default(now(), map: "DF_FinancingTermsSection_updated_at") @updatedAt
+  FinancingParameters FinancingParameters[]
+  FinancingTerms      FinancingTerms[]
+}
+
+model FinancingParameters {
+  id                      Int                       @id @default(autoincrement())
+  parameter_name          String
+  finance_module_name     String?
+  section_id              Int?
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @default(now(), map: "DF_FinancingParameters_updated_at") @updatedAt
+  AssetCo                 AssetCo[]
+  CorporateDebt           CorporateDebt[]
+  DebtVsSwaps             DebtVsSwaps[]
+  Dscr                    Dscr[]
+  FinancingCounterparties FinancingCounterparties[]
+  section                 FinancingTermsSection?    @relation(fields: [section_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  FinancingScheduler      FinancingScheduler[]
+  FinancingTerms          FinancingTerms[]
+  Lc                      Lc[]
+  Nav                     Nav[]
+  TaxEquity               TaxEquity[]
+
+  @@index([section_id])
+}
+
+model FinancingTerms {
+  id           Int                    @id @default(autoincrement())
+  project_id   Int
+  loan_type_id Int?
+  section_id   Int?
+  parameter_id Int?
+  value        String?
+  created_at   DateTime               @default(now())
+  updated_at   DateTime               @default(now(), map: "DF_FinancingTerms_updated_at") @updatedAt
+  loan_type    LoanTypes?             @relation(fields: [loan_type_id], references: [id])
+  parameter    FinancingParameters?   @relation(fields: [parameter_id], references: [id])
+  project      Project                @relation(fields: [project_id], references: [id])
+  section      FinancingTermsSection? @relation(fields: [section_id], references: [id])
+
+  @@index([project_id])
+  @@index([loan_type_id])
+  @@index([section_id])
+  @@index([parameter_id])
+}
+
+model FinancingScheduler {
+  id           Int                  @id @default(autoincrement())
+  project_id   Int
+  loan_type_id Int?
+  lender_name  String?
+  parameter_id Int?
+  value        String?
+  created_at   DateTime             @default(now())
+  updated_at   DateTime             @default(now(), map: "DF_FinancingScheduler_updated_at") @updatedAt
+  loan_type    LoanTypes?           @relation(fields: [loan_type_id], references: [id])
+  parameter    FinancingParameters? @relation(fields: [parameter_id], references: [id])
+  project      Project              @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([loan_type_id])
+  @@index([parameter_id])
+}
+
+model TaxEquityType {
+  id              Int         @id @default(autoincrement())
+  tax_equity_name String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @default(now(), map: "DF_TaxEquityType_updated_at") @updatedAt
+  TaxEquity       TaxEquity[]
+}
+
+model TaxEquity {
+  id                 Int                 @id @default(autoincrement())
+  project_id         Int
+  tax_equity_type_id Int
+  parameter_id       Int
+  value              String?
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @default(now(), map: "DF_TaxEquity_updated_at") @updatedAt
+  parameter          FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project            Project             @relation(fields: [project_id], references: [id])
+  tax_equity_type    TaxEquityType       @relation(fields: [tax_equity_type_id], references: [id])
+
+  @@index([project_id])
+  @@index([tax_equity_type_id])
+  @@index([parameter_id])
+}
+
+model AssetCo {
+  id                          Int                 @id @default(autoincrement())
+  project_id                  Int
+  parameter_id                Int
+  commitment_usd              Float?
+  non_desri_ownership_percent Float?
+  created_at                  DateTime            @default(now())
+  updated_at                  DateTime            @default(now(), map: "DF_AssetCo_updated_at") @updatedAt
+  parameter                   FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project                     Project             @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([parameter_id])
+}
+
+model CorporateDebt {
+  id           Int                 @id @default(autoincrement())
+  project_id   Int
+  parameter_id Int
+  value        String?
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @default(now(), map: "DF_CorporateDebt_updated_at") @updatedAt
+  parameter    FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project      Project             @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([parameter_id])
+}
+
+model Nav {
+  id           Int                 @id @default(autoincrement())
+  project_id   Int
+  parameter_id Int
+  value        String?
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @default(now(), map: "DF_Nav_updated_at") @updatedAt
+  parameter    FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project      Project             @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([parameter_id])
+}
+
+model Refinancing {
+  id                Int       @id @default(autoincrement())
+  project_id        Int
+  refinancing_date  DateTime?
+  refinancing_terms String?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now(), map: "DF_Refinancing_updated_at") @updatedAt
+  project           Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model LcType {
+  id         Int      @id @default(autoincrement())
+  lc_name    String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now(), map: "DF_LcType_updated_at") @updatedAt
+}
+
+model Lc {
+  id           Int                 @id @default(autoincrement())
+  project_id   Int
+  parameter_id Int
+  value        String?
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @default(now(), map: "DF_Lc_updated_at") @updatedAt
+  lc_instance  Int                 @default(1)
+  lc_type      String?
+  parameter    FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project      Project             @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([parameter_id])
+}
+
+model FinancingCounterpartyType {
+  id                      Int                       @id @default(autoincrement())
+  counterparty_type       String
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @default(now(), map: "DF_FinancingCounterpartyType_updated_at") @updatedAt
+  FinancingCounterparties FinancingCounterparties[]
+}
+
+model FinancingCounterparties {
+  id                   Int                       @id @default(autoincrement())
+  project_id           Int
+  counterparty_type_id Int
+  parameter_id         Int
+  value                String?
+  created_at           DateTime                  @default(now())
+  updated_at           DateTime                  @default(now(), map: "DF_FinancingCounterparties_updated_at") @updatedAt
+  party_instance       Int                       @default(1)
+  counterparty_type    FinancingCounterpartyType @relation(fields: [counterparty_type_id], references: [id])
+  parameter            FinancingParameters       @relation(fields: [parameter_id], references: [id])
+  project              Project                   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([counterparty_type_id])
+  @@index([parameter_id])
+}
+
+model Dscr {
+  id           Int                 @id @default(autoincrement())
+  project_id   Int
+  parameter_id Int
+  value        String?
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @default(now(), map: "DF_Dscr_updated_at") @updatedAt
+  as_of_date   DateTime?
+  parameter    FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project      Project             @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([parameter_id])
+}
+
+model Swaps {
+  id                    Int       @id @default(autoincrement())
+  project_id            Int
+  entity_name           String?
+  banks                 String?
+  starting_notional_usd Float?
+  future_notional_usd   Float?
+  fixed_rate_percent    Float?
+  trade_date            DateTime?
+  effective_date        DateTime?
+  expiration_date       DateTime?
+  met_date              DateTime?
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @default(now(), map: "DF_Swaps_updated_at") @updatedAt
+  project               Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model DebtVsSwaps {
+  id           Int                 @id @default(autoincrement())
+  project_id   Int
+  parameter_id Int
+  value        String?
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @default(now(), map: "DF_DebtVsSwaps_updated_at") @updatedAt
+  parameter    FinancingParameters @relation(fields: [parameter_id], references: [id])
+  project      Project             @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+  @@index([parameter_id])
+}
+
+model AmortSchedule {
+  id                Int       @id @default(autoincrement())
+  project_id        Int
+  start_date        DateTime?
+  beginning_balance Float?
+  ending_balance    Float?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now(), map: "DF_AmortSchedule_updated_at") @updatedAt
+  hedge_percentage  Float?
+  notional          Float?
+  project           Project   @relation(fields: [project_id], references: [id])
+
+  @@index([project_id])
+}
+
+model VitalsMetadata {
+  id            Int      @id @default(autoincrement())
+  table_name    String
+  field_key     String
+  display_label String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  data_type     String?
+  module_name   String?
+  parent_module String?
+}
+
+model generationTrend {
+  id         Int       @id(map: "PK__generati__3213E83FDC9E00ED") @default(autoincrement())
+  project_id Int
+  month      String?   @db.VarChar(20)
+  year       Int?
+  plan_mwh   Decimal?  @db.Decimal(15, 2)
+  actual_mwh Decimal?  @db.Decimal(15, 2)
+  plan_poa   Decimal?  @db.Decimal(10, 2)
+  actual_poa Decimal?  @db.Decimal(10, 2)
+  created_at DateTime? @default(now(), map: "DF__generatio__creat__7BE56230") @db.DateTime
+  updated_at DateTime? @default(now(), map: "DF__generatio__updat__7CD98669") @db.DateTime
+}
+
+model projectPerformance {
+  id           Int       @id(map: "PK__projectP__3213E83F3DFCC981") @default(autoincrement())
+  project_id   Int
+  period_type  String?   @db.VarChar(50)
+  period_month String?   @db.VarChar(20)
+  period_year  Int?
+  metric_name  String?   @db.VarChar(50)
+  plan_value   Decimal?  @db.Decimal(15, 2)
+  actual_value Decimal?  @db.Decimal(15, 2)
+  created_at   DateTime? @default(now(), map: "DF__projectPe__creat__7814D14C") @db.DateTime
+  updated_at   DateTime? @default(now(), map: "DF__projectPe__updat__7908F585") @db.DateTime
+}
+
+model DropdownOptions {
+  id           Int      @id @default(autoincrement())
+  field_name   String
+  option_value String
+  table_name   String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now(), map: "DF_DropdownOptions_updated_at") @updatedAt
+}
+
+model AuditLog {
+  id           Int      @id @default(autoincrement())
+  project_name String   @db.VarChar(255)
+  user_name    String   @db.VarChar(255)
+  module_name  String   @db.VarChar(100)
+  sub_module   String?  @db.VarChar(100)
+  field_name   String   @db.VarChar(255)
+  old_value    String?  @db.Text
+  new_value    String?  @db.Text
+  action_type  String   @db.VarChar(50)
+  timestamp    DateTime @default(now())
+  @@index([timestamp])
+  @@index([module_name])
+}
