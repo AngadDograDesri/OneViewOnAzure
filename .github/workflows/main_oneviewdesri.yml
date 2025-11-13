@@ -70,14 +70,10 @@ jobs:
       - name: Unzip artifact
         run: unzip artifact.zip -d artifact
 
-      - name: Azure Login (using publish profile)
-        uses: azure/login@v1
-        with:
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D6C74C6462B04D33ADBBCA6B40D3FF77 }}
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.APP_NAME }}
           slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D6C74C6462B04D33ADBBCA6B40D3FF77 }}
           package: artifact
